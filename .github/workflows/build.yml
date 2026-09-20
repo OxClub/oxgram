@@ -25,24 +25,16 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: 11076708
-
-      - name: Accept licenses
-        run: yes | sdkmanager --licenses || true
-
-      - name: Install SDK / NDK / CMake
+      - name: Install NDK and CMake
         run: |
+          export ANDROID_SDK_ROOT=/usr/local/lib/android/sdk
+          yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses || true
           sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
-            "platforms;android-36" \
-            "build-tools;36.0.0" \
             "ndk;27.2.12479018" \
             "cmake;3.22.1"
 
       - name: Export NDK path
-        run: echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/27.2.12479018" >> "$GITHUB_ENV"
+        run: echo "ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/27.2.12479018" >> "$GITHUB_ENV"
 
       - name: Cache Gradle
         uses: actions/cache@v4
@@ -56,7 +48,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Build Debug APK (fast, CI-friendly)
+      - name: Build Debug APK
         run: ./gradlew assembleAfatDebug --stacktrace
 
       - name: Upload APK artifact
