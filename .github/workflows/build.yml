@@ -27,6 +27,11 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 11076708
+
+      - name: Accept licenses
+        run: yes | sdkmanager --licenses || true
 
       - name: Install SDK / NDK / CMake
         run: |
@@ -53,17 +58,6 @@ jobs:
 
       - name: Build Debug APK (fast, CI-friendly)
         run: ./gradlew assembleAfatDebug --stacktrace
-
-      # ---------------------------------------------------------------
-      #  RELEASE: uncomment the block below once you have added your own
-      #  release keystore + google-services.json. Never upload your real
-      #  keystore to the repo — use GitHub Secrets instead.
-      # ---------------------------------------------------------------
-      # - name: Decode keystore from secret
-      #   run: |
-      #     echo "${{ secrets.OXGRAM_KEYSTORE_BASE64 }}" | base64 -d > TMessagesProj/release.keystore
-      # - name: Build Release APK
-      #   run: ./gradlew assembleAfatRelease --stacktrace
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
