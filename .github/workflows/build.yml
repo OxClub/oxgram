@@ -52,10 +52,13 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleAfatDebug --stacktrace
 
+      - name: Find APK
+        run: find . -name "*.apk" -type f
+
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: oxgram-apk
-          path: TMessagesProj/build/outputs/apk/**/*.apk
+          path: "**/*.apk"
           if-no-files-found: error
           retention-days: 14
