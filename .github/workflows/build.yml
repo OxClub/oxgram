@@ -27,9 +27,10 @@ jobs:
 
       - name: Install NDK and CMake
         run: |
+          SDKMANAGER=/usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager
           export ANDROID_SDK_ROOT=/usr/local/lib/android/sdk
-          yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses || true
-          sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
+          yes | $SDKMANAGER --sdk_root=$ANDROID_SDK_ROOT --licenses || true
+          $SDKMANAGER --sdk_root=$ANDROID_SDK_ROOT \
             "ndk;27.2.12479018" \
             "cmake;3.22.1"
 
